@@ -1,15 +1,28 @@
-
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
+import { useContext } from "react";
+import { ThemeContext } from "../context/themeContext";
+import { FaMoon, FaSun, FaUser } from 'react-icons/fa';
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
+  const {theme, setTheme} = useContext(ThemeContext)
+  const handleTheme = () => {
+    if(localStorage.getItem('theme') === 'dark'){
+      localStorage.setItem('theme', 'light')
+      setTheme('light')
+    }else{
+      localStorage.setItem('theme', 'dark')
+      setTheme('dark')
+    }
+  }
 
+  
   return (
-      <nav className="w-full fixed top-0 z-40 bg-white shadow">
-        <div className=" justify-between px-4 mx-auto lg:max-w-7xl sm:items-center sm:flex sm:px-8">
+      <nav className="w-full fixed top-0 z-40 bg-white dark:bg-dark-mode shadow-md">
+        <div className="container justify-between px-4 py-3 mx-auto sm:items-center sm:flex md:px-16">
           <div>
-            <div className="flex items-center justify-between py-3 ">
+            <div className="flex items-center justify-between">
               <Link to={"/"}>
                   <h2 className="text-2xl font-bold">LOGO</h2>
               </Link>
@@ -53,7 +66,7 @@ const Navbar = () => {
           </div>
           <div className="items-center sm:flex">
             <div
-              className={`flex-1 justify-self-center pb-3 mt-8 sm:block sm:pb-0 sm:mt-0 ${
+              className={`flex-1 justify-self-center pb-3 mt-8 sm:block sm:pb-0 sm:mt-0 transition-all ${
                   navbar ? "block" : "hidden"
               }`}
               >
@@ -82,9 +95,10 @@ const Navbar = () => {
             </div>
             
           </div>
-          <div className={`mt-8 sm:block sm:pb-0 sm:mt-0 ${navbar ? "block" : "hidden"}`}>
-              <button className="border-none bg-red-400 text-white outline-none px-2 py-1 mr-2 rounded-md">Signup</button>
-              <button className="block mt-2 sm:inline sm:mt-0">User</button>
+          <div className={`mt-8 sm:flex sm:items-center sm:pb-1 sm:mt-0 ${navbar ? "block" : "hidden"}`}>
+              <Link to={"/login"} className="border hover:bg-dark-mode hover:text-white transition-all bg-red-400 outline-none px-4 py-1 mr-3 rounded-md">Login</Link>
+              <button className="block mt-4 mr-3 sm:mt-0"><FaUser/></button>
+              <button onClick={handleTheme} className="outline-none border-none mt-4 sm:mt-0">{theme === 'dark' ? <FaSun/> : <FaMoon/>}</button>
             </div>
         </div>
       </nav>

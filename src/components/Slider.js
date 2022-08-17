@@ -13,9 +13,9 @@ const Slidersection = () => {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 3,
+        slidesToShow: 4,
         arrows: false,
-        autoplay: true,
+        autoplay: false,
         autoplaySpeed: 1000,
         slidesToScroll: 2,
         responsive: [
@@ -47,27 +47,27 @@ const Slidersection = () => {
       };
   
     return ( 
-        <div className="mt-16">
-            <div className="">
-                <Slider className="" {...settings}>
-                    <div className="">
-                        <CardCarousel image={img1}/>
-                    </div>
-                    <div className="">
-                        <CardCarousel image={img2}/>
-                    </div>
-                    <div className="">
-                        <CardCarousel image={img3}/>
-                    </div>
-                    <div className="">
-                        <CardCarousel image={img3}/>
-                    </div>
-                    <div className="">
-                        <CardCarousel image={img3}/>
-                    </div>
-                    <div className="">
-                        <CardCarousel image={img3}/>
-                    </div>
+        <div>
+            <div className="m-0">
+                <Slider {...settings} className="h-[420px]">
+                  <div>
+                    <CardCarousel image={img1}/>
+                  </div>
+                  <div>
+                    <CardCarousel image={img2}/>
+                  </div>
+                  <div>
+                    <CardCarousel image={img3}/>
+                  </div>
+                  <div>
+                    <CardCarousel image={img3}/>
+                  </div>
+                  <div>
+                    <CardCarousel image={img3}/>
+                  </div>
+                  <div>
+                    <CardCarousel image={img3}/>
+                  </div>
                 </Slider>
             </div>
         </div>
