@@ -1,22 +1,10 @@
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { useContext } from "react";
-import { ThemeContext } from "../context/themeContext";
-import { FaMoon, FaSun, FaUser } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
+import Toggletheme from "./Toggletheme";
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
-  const {theme, setTheme} = useContext(ThemeContext)
-  const handleTheme = () => {
-    if(localStorage.getItem('theme') === 'dark'){
-      localStorage.setItem('theme', 'light')
-      setTheme('light')
-    }else{
-      localStorage.setItem('theme', 'dark')
-      setTheme('dark')
-    }
-  }
-
   
   return (
       <nav className="w-full fixed top-0 z-40 bg-white dark:bg-dark-mode shadow-md">
@@ -98,7 +86,7 @@ const Navbar = () => {
           <div className={`mt-8 sm:flex sm:items-center sm:pb-1 sm:mt-0 ${navbar ? "block" : "hidden"}`}>
               <Link to={"/login"} className="border hover:bg-dark-mode hover:text-white transition-all bg-red-400 outline-none px-4 py-1 mr-3 rounded-md">Login</Link>
               <button className="block mt-4 mr-3 sm:mt-0"><FaUser/></button>
-              <button onClick={handleTheme} className="outline-none border-none mt-4 sm:mt-0">{theme === 'dark' ? <FaSun/> : <FaMoon/>}</button>
+              <Toggletheme/>
             </div>
         </div>
       </nav>

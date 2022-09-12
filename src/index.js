@@ -6,19 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './context/authContext';
 import { ThemeContextProvider } from './context/themeContext';
 import {BrowserRouter} from 'react-router-dom';
+import { LogicContextProvider } from './context/logicContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <AuthContextProvider> 
-      <BrowserRouter>
-        <ThemeContextProvider>
+  <AuthContextProvider> 
+    <BrowserRouter>
+      <ThemeContextProvider>
+        <LogicContextProvider>
           <App />
-        </ThemeContextProvider>
-      </BrowserRouter>
-    </AuthContextProvider>
-  </React.StrictMode>
+        </LogicContextProvider>
+      </ThemeContextProvider>
+    </BrowserRouter>
+  </AuthContextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

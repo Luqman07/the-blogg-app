@@ -5,7 +5,7 @@ import BlogLists from "../components/BlogLists";
 const Homepage = () => {
     return ( 
         <section className="mt-14">
-            <Slidersection/>
+            {/* <Slidersection/> */}
             <Trending/>
             <hr className="text-lightGray"/>
             <BlogLists/>
