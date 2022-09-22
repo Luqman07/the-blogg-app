@@ -12,6 +12,10 @@ const LoginForm = () => {
     const { dispatch } = useContext(AuthContext)
     const navigate = useNavigate()
 
+
+    function refreshPage() {
+        window.location.reload(false);
+    }
     // user && console.log(user.user.uid);
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -29,6 +33,7 @@ const LoginForm = () => {
             dispatch({type: 'LOGIN', payload: {user}})
             localStorage.setItem('user', user)
             navigate("/home")
+            refreshPage()
         }catch(err){
             setError(err.errorCode)
             console.log(err);

@@ -1,4 +1,4 @@
-import { blogs } from "../utils";
+// import { blogs } from "../utils";
 import BlogCard from "./BlogCard"
 import Recommended from "./Recommended";
 const BlogLists = () => {
@@ -6,7 +6,7 @@ const BlogLists = () => {
     <section className="container mx-auto py-12 px-4 md:px-16 flex gap-x-28 flex-col md:flex-row">
         <section className="flex flex-col gap-y-10 basis-2/3">
             {
-                blogs?.map((blog, index) => <BlogCard key={index} blog={blog}/>)
+                // blogs?.map((blog, index) => <BlogCard key={index} blog={blog}/>)
             }
         </section>
         <aside className="basis-1/3">

@@ -1,4 +1,4 @@
-import Slidersection from "../components/Slider";
+// import Slidersection from "../components/Slider";
 import Trending from "../components/Trending";
 import BlogLists from "../components/BlogLists";
 

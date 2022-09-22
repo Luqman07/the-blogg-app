@@ -18,11 +18,11 @@ const LeftSidebar = () => {
         }
     }
     return ( 
-        <section className=" fixed left-0 w-20 border-r border-lightGray min-h-screen overflow-y-auto">
+        <section className=" fixed left-0 w-20 border-r border-lightGray min-h-screen overflow-y-auto hidden md:block">
             <div className="mt-12">
                 <Link to={"/home"}><h3 className="bold text-center font-bold mb-16">LOGO</h3></Link>
                 <ul>
-                    <li className="mb-12"><Link className="block" to={"#"}><FaHome className="mx-auto text-dark-mode" size={25} /></Link></li>
+                    <li className="mb-12"><Link className="block" to={"/home"}><FaHome className="mx-auto text-dark-mode" size={25} /></Link></li>
                     <li className="mb-12"><Link className="block" to={"#"}><FaRegBookmark className="mx-auto" size={20}/></Link></li>
                     <li className="mb-12"><Link className="block" to={"#"}><FaRegBell className="mx-auto" size={20}/></Link></li>
                     {/* <li><Link className="block" to={"#"}><FaHome className="mx-auto" size={25}/></Link></li> */}

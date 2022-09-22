@@ -69,7 +69,7 @@ const NewBlog = () => {
     
     const handlePublish = () => {
         isPublished(!published)
-        console.log(file)
+        // console.log(file)
         setData(prevData => ({...prevData, title, description}))
         console.log(data, title, description);
     }

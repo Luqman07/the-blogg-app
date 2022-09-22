@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { auth } from "../firebase"
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
+import { doc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore"; 
 import { db } from "../firebase";
 // import { useContext } from "react";
 // import { AuthContext } from "../context/authContext";
@@ -26,25 +26,28 @@ export const LogicContextProvider = ({ children }) => {
           id: user.uid,
           fullName,
           email,
+          bio: '',
+          profileUrl: '',
+          about: '',
           timeStamp: serverTimestamp()
         }
-        
+        console.log(signUpUser)
         await setDoc(doc(db, "users", user.uid), data);
         await updateProfile(auth.currentUser, {
           displayName: fullName
           }).then((user) => {
               // Profile updated!
-              console.log('Profile Updated', user);
+              console.log('Profile Updated');
           }).catch((error) => {
               console.log(error);
           });
       }catch(e){
         setSignUpError('E-mail already in use')
-        console.log(e);
         console.error("Error adding document: ", e);
       }
       return {signUpUser, signUpError}
     }
+    
     
  
   let value = {

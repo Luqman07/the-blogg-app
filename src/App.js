@@ -7,6 +7,7 @@ import Homeauthpage from "./pages/Homeauthpage";
 import Userpage from "./pages/Userpage";
 import NewBlog from "./components/NewBlog";
 import Publishpage from "./pages/Publishpage";
+import Settingspage from "./pages/Settingspage";
 import Blogdetailpage from "./pages/Blogdetail";
 import Topicdetailpage from "./pages/Topicdetail";
 import { useContext } from "react";
@@ -19,6 +20,7 @@ function App() {
   console.log(user)
   
   const RequireAuth = ({ children }) => user  ? children : <Navigate to="/login"/>
+  // const Authorized = () => user  ?  <Navigate to="/home"/> : <Navigate to="/"/>;
 
   return (
     <div className="App w-full min-h-screen bg-white text-black dark:bg-dark-mode dark:text-white transition">
@@ -32,7 +34,8 @@ function App() {
             <Route path="home" in element={<RequireAuth><Homeauthpage /></RequireAuth>} />
             <Route path="new-blog" element={<RequireAuth><NewBlog /></RequireAuth>} />
             <Route path="publish" element={<RequireAuth><Publishpage /></RequireAuth>} />
-            <Route path=":user" element={<Userpage />} />
+            <Route path=":userId" element={<Userpage />} />
+            <Route path="settings" element={<Settingspage />} />
             <Route path="/blog/:id" element={<Blogdetailpage />} />
             <Route path="topic/:topic" element={<Topicdetailpage />} />
           </Routes>

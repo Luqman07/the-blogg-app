@@ -38,11 +38,11 @@ const SignupForm = () => {
         
        try{
         const {signUpUser, signUpError} = await signUp(fullName, email, password)
-        console.log(signUpError);
+        signUpUser && console.log(signUpError, signUpUser);
         if(signUpUser){
-            console.log(signUpUser)
-            dispatch({type: 'LOGIN', payload: signUpUser})
+            console.log('Registered user: ' + signUpUser)
             navigate('/home')
+            dispatch({type: 'LOGIN', payload: signUpUser})
             return
         }
        }catch(e){

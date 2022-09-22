@@ -7,7 +7,7 @@ const Userpage = () => {
     return(
         <section>
             <LeftSidebar />
-            <Userblogs userProp={user.split(" ")[0]} userInfo={user}/>
+            <Userblogs userInfo={user}/>
         </section>
     )
 }

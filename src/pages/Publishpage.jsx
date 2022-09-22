@@ -1,13 +1,15 @@
 import { useEffect, useState, useContext } from "react";
-import { addDoc, collection,  serverTimestamp } from "firebase/firestore"; 
+import { setDoc, doc, collection,  serverTimestamp } from "firebase/firestore"; 
 import { db } from "../firebase";
 import { AuthContext } from "../context/authContext";
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from "react-router-dom";
 
-
-const Publishpage = ({handlePublish, data, setData, imgUrl}) => {
+const Publishpage = ({handlePublish, data, setData}) => {
     const [snippet, setSnippet] = useState('')
     const [topic, setTopic] = useState('')
     const {user} = useContext(AuthContext)
+    const navigate = useNavigate()
  
     useEffect(() => {
        setData(data =>  ({...data, snippet, topic}))
@@ -15,21 +17,29 @@ const Publishpage = ({handlePublish, data, setData, imgUrl}) => {
 
     const handlePost = async (e) => {
         e.preventDefault()
+        let generatedId = uuidv4()
         try{
             const blogPost = {
                 ...data,
-                likedUsers: {
+                like: {
                     likeCount: 0,
                     likedUsers: []
                 },
+                bookmarkedUsers: {
+                    bookmarkedBool: false,
+                    bookedmarkedUsers: []
+                },
+                blogId: generatedId,
                 isTrending: false, 
-                id: user.uid,
+                uid: user.uid,
                 displayName: user.displayName,
                 timeStamp: serverTimestamp()
             }
             setData({...data, snippet})
-            const res = await addDoc(collection(db, "blogs"), blogPost);
+            // const res = await addDoc(collection(db, "blogs"), blogPost);
+            const res = await setDoc(doc(db, "blogs", generatedId), blogPost);
             console.log(res);
+            navigate('/home')
             // console.log(data, snippet, topic, user);
 
         }catch(err){
