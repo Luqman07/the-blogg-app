@@ -10,13 +10,15 @@ import Publishpage from "./pages/Publishpage";
 import Settingspage from "./pages/Settingspage";
 import Blogdetailpage from "./pages/Blogdetail";
 import Topicdetailpage from "./pages/Topicdetail";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "./context/authContext";
 import { Navigate } from "react-router-dom"
+import Bookmarkpage from "./pages/Bookmarkpage";
 
 function App() {
   const { pathname } = useLocation()
   const {user, authIsReady} = useContext(AuthContext)
+  const [likeCount, setLikeCount] = useState(0)
   console.log(user)
   
   const RequireAuth = ({ children }) => user  ? children : <Navigate to="/login"/>
@@ -31,12 +33,13 @@ function App() {
             <Route path="/" element={<Homepage />} />
             <Route path="login" element={<Loginpage />} />
             <Route path="signup" element={<Signuppage />} />
-            <Route path="home" in element={<RequireAuth><Homeauthpage /></RequireAuth>} />
+            <Route path="home" in element={<RequireAuth><Homeauthpage setLikeCount={setLikeCount} likeCount={likeCount} /></RequireAuth>} />
             <Route path="new-blog" element={<RequireAuth><NewBlog /></RequireAuth>} />
             <Route path="publish" element={<RequireAuth><Publishpage /></RequireAuth>} />
             <Route path=":userId" element={<Userpage />} />
             <Route path="settings" element={<Settingspage />} />
-            <Route path="/blog/:id" element={<Blogdetailpage />} />
+            <Route path="bookmark" element={<Bookmarkpage />} />
+            <Route path="/blog/:id" element={<Blogdetailpage setLikeCount={setLikeCount} likeCount={likeCount}/>} />
             <Route path="topic/:topic" element={<Topicdetailpage />} />
           </Routes>
         )

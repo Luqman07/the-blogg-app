@@ -1,12 +1,12 @@
 import LeftSidebar from "../components/LeftSidebar";
 import Maincontent from "../components/Maincontent";
 
-const Homeauthpage = () => {
+const Homeauthpage = ({ likeCount, setLikeCount }) => {
     
     return ( 
         <main className="">
             <LeftSidebar/>
-            <Maincontent />
+            <Maincontent likeCount={likeCount} setLikeCount={setLikeCount}/>
         </main>
     );
 }

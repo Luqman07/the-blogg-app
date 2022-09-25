@@ -6,7 +6,7 @@ import Sidetrendcard from "./Sidetrendcard";
 const RightSidebar = ({blogz}) => {
 
     return ( 
-        <section className="border-lightGray w-[34rem] py-12 px-5 h-screen ml-auto border-l sticky top-0 bottom-0 hidden md:block">
+        <section className="border-lightGray w-[34rem] py-12 px-5 h-screen ml-auto border-l sticky top-0 bottom-0 hidden lg:block">
             <h3>Trending</h3>
             <div className="flex flex-col mb-2">
                 {

@@ -6,9 +6,9 @@ import { getDocs, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
 
-const Maincontent = () => {
+const Maincontent = ({likeCount, setLikeCount}) => {
     const [blogz, setBlogz] = useState([])
-    const [likeCount, setLikeCount] = useState(0)
+    // const [likeCount, setLikeCount] = useState(0)
     
     useEffect(() => {
         // This function fetches all the blog data from firebase and sets the blog state

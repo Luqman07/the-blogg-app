@@ -3,7 +3,6 @@ import Recommended from "./Recommended";
 
 const Userinfo = ({ name }) => {
     const userName = name
-    console.log(userName)
     return ( 
         <section className="border-lightGray w-[32rem] py-12 px-5 h-screen ml-auto border-l sticky top-0 bottom-0 hidden lg:block">
             {/* <h3 className="mb-5">User</h3> */}

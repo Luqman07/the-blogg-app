@@ -23,11 +23,10 @@ const LeftSidebar = () => {
                 <Link to={"/home"}><h3 className="bold text-center font-bold mb-16">LOGO</h3></Link>
                 <ul>
                     <li className="mb-12"><Link className="block" to={"/home"}><FaHome className="mx-auto text-dark-mode" size={25} /></Link></li>
-                    <li className="mb-12"><Link className="block" to={"#"}><FaRegBookmark className="mx-auto" size={20}/></Link></li>
+                    <li className="mb-12"><Link className="block" to={"/bookmark"}><FaRegBookmark className="mx-auto" size={20}/></Link></li>
                     <li className="mb-12"><Link className="block" to={"#"}><FaRegBell className="mx-auto" size={20}/></Link></li>
-                    {/* <li><Link className="block" to={"#"}><FaHome className="mx-auto" size={25}/></Link></li> */}
                 </ul>
-                <hr className="w-5 mt-5 mx-auto text-dark-mode"/>
+                <hr className="w-5 mt-5 mx-auto"/>
                 <ul className="mt-6">
                     <li className="flex justify-center py-2"><Toggletheme /></li>
                     <li className="mb-24 mt-10"><Link className="block" to={"/new-blog"}><FaPen className="mx-auto" size={18}/></Link></li>
