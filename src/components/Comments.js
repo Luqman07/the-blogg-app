@@ -1,13 +1,18 @@
 import { useState, useContext } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { setDoc, doc,  serverTimestamp } from "firebase/firestore"; 
+import { collection, query, where, getDocs, setDoc, doc,  serverTimestamp } from "firebase/firestore"; 
 import { db } from "../firebase";
 import { AuthContext } from "../context/authContext";
+import { useEffect } from "react";
+// import { LogicContext } from "../context/logicContext";
+
 
 
 const Comment = ({ blog, setComments, comments }) => {
     const [content, setContent] = useState('')
     const {user} = useContext(AuthContext)
+    // const { fetchPost } = useContext(LogicContext)
+    const [use, setUse] = useState([])
     // console.log(blog)
     const handlePostComment = async () => {
         if(content === '') return
@@ -20,6 +25,7 @@ const Comment = ({ blog, setComments, comments }) => {
                 commentId: generatedId,
                 userId: user.uid,
                 displayName: user.displayName,
+                dp: use.profileUrl,
                 timeStamp: serverTimestamp(),
             }
             setComments([...comments, commentPost])
@@ -31,8 +37,27 @@ const Comment = ({ blog, setComments, comments }) => {
 
     }
 
+    useEffect(() => {
+        const fetchUser =  async (ref, id) => {
+            try{
+                const q = query(collection(db, "users"), where(ref, "==", id));
+                const querySnapshot = await getDocs(q);
+                
+                // let list = [];
+                querySnapshot.forEach((doc) => {
+                // list.push(doc.data())
+                setUse(doc.data())
+            }); 
+        }catch(e){
+            console.log(e);
+        }
+        
+    }
+    fetchUser('id', user.uid)
+    }, [])
+
     return ( 
-        <section className="flex">
+        <section className="flex mb-10">
              <div className="flex-grow">
                 {/* <label htmlFor="" className="block mb-1">Write a comment</label> */}
                 <input 

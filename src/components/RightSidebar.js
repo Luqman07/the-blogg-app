@@ -1,4 +1,5 @@
 // import { blogs } from "../utils";
+import { RightSideLoading } from "../utils";
 import Recommended from "./Recommended";
 // import Pills from "./Pills";
 import Sidetrendcard from "./Sidetrendcard";
@@ -10,12 +11,15 @@ const RightSidebar = ({blogz}) => {
             <h3>Trending</h3>
             <div className="flex flex-col mb-2">
                 {
-                    [blogz[0], blogz[1]].map((blog, index) => <Sidetrendcard blog={blog} key={index}/>)
+                    blogz.length > 0 ? [blogz[0], blogz[1]].map((blog, index) => <Sidetrendcard blog={blog} key={index}/>) : <RightSideLoading/>
                 }
             </div>
             <Recommended />
         </section>
-     );
+    );
+
 }
+
+
  
 export default RightSidebar;

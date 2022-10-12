@@ -5,6 +5,7 @@ import Toggletheme from "./Toggletheme";
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
+  console.log(navbar);
   
   return (
       <nav className="w-full fixed top-0 z-40 bg-white dark:bg-dark-mode shadow-md">
@@ -52,9 +53,11 @@ const Navbar = () => {
               </div>
             </div>
           </div>
+
+
           <div className="items-center sm:flex">
             <div
-              className={`flex-1 justify-self-center pb-3 mt-8 sm:block sm:pb-0 sm:mt-0 transition-all ${
+              className={` justify-self-center pb-3 mt-8 sm:block sm:pb-0 sm:mt-0 transition-all ${
                   navbar ? "block" : "hidden"
               }`}
               >
@@ -67,12 +70,12 @@ const Navbar = () => {
                 <li className="text-gray-600 hover:text-blue-600">
                     <NavLink className={({isActive}) => 
                       isActive ? "font-bold" : undefined
-                  } to={"/blog"}>Blog</NavLink>
+                  } to={"/"}>Blog</NavLink>
                 </li>
                 <li className="text-gray-600 hover:text-blue-600">
                     <NavLink className={({isActive}) => 
                       isActive ? "font-bold" : undefined
-                  } to={"/about-us"}>About Us</NavLink>
+                  } to={"/"}>About Us</NavLink>
                 </li>
                 <li className="text-gray-600 hover:text-blue-600">
                     <NavLink to={"/"}>Contact US</NavLink>
@@ -83,11 +86,12 @@ const Navbar = () => {
             </div>
             
           </div>
+
           <div className={`mt-8 sm:flex sm:items-center sm:pb-1 sm:mt-0 ${navbar ? "block" : "hidden"}`}>
-              <Link to={"/login"} className="border hover:bg-dark-mode hover:text-white transition-all bg-red-400 outline-none px-4 py-1 mr-3 rounded-md">Login</Link>
-              <button className="block mt-4 mr-3 sm:mt-0"><FaUser/></button>
-              <Toggletheme/>
-            </div>
+            <Link to={"/login"} className="border hover:bg-dark-mode hover:text-white transition-all bg-red-400 outline-none px-4 py-1 mr-3 rounded-md">Login</Link>
+            <button className="block mt-4 mr-3 sm:mt-0"><FaUser/></button>
+            <Toggletheme/>
+          </div>
         </div>
       </nav>
   );

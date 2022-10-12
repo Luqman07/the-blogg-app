@@ -6,19 +6,20 @@ import Toggletheme from "./Toggletheme";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
-
 const LeftSidebar = () => {
     const { dispatch } = useContext(AuthContext)
+
     const handleLogout = async () => {
         try{
             await signOut(auth)
             dispatch({type: "LOGOUT", payload: null})
+
         }catch(err){
             console.log(err)
         }
     }
     return ( 
-        <section className=" fixed left-0 w-20 border-r border-lightGray min-h-screen overflow-y-auto hidden md:block">
+        <section className=" fixed left-0 w-20 border-r border-lightGray min-h-screen overflow-y-auto hidden sm:block">
             <div className="mt-12">
                 <Link to={"/home"}><h3 className="bold text-center font-bold mb-16">LOGO</h3></Link>
                 <ul>

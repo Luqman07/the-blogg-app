@@ -1,3 +1,4 @@
+// import { getAuth, deleteUser, AuthCredential } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { FaCamera, FaUser } from 'react-icons/fa';
 import Toggletheme from "../components/Toggletheme";
@@ -7,7 +8,10 @@ import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-
+import { auth } from "../firebase"
+import { updateProfile, reauthenticateWithCredential, deleteUser, AuthCredential } from "firebase/auth";
+import { Link } from "react-router-dom";
+import ManagePost from "../components/ManagePost";
 
 const Settingspage = () => {
     const [navbar, setNavbar] = useState(false);
@@ -20,18 +24,39 @@ const Settingspage = () => {
     const [name, setName] = useState('')
     const [bio, setBio] = useState('')
     const [about, setAbout] = useState('')
-    const [profileUrl, setProfileUrl] = useState('')
+    const [profileUrl, setProfileUrl] = useState(null)
     const [email, setEmail] = useState('')
     const [file, setFile] = useState(null)
     const {user} = useContext(AuthContext)
 
     const editUserField = (fn) => fn(true)
+    const cancelUserField = (fn) => fn(false)
+
+    // const reAuthenticateUser = () => {
+    //     // const credential = promptForCredentials();
+    //     // console.log();
+    //     reauthenticateWithCredential(user, AuthCredential).then(() => {
+    //     // User re-authenticated.
+    //     }).catch((error) => {
+    //     // An error ocurred
+    //     // ...
+    //     });
+    // }
+    // const deleteUserAuth = async () => {
+    //     // const user = auth.currentUser;
+    //     deleteUser(user).then(() => {
+    //     // User deleted.
+    //         console.log('Deleted')
+    //     }).catch((error) => {
+    //         // An error ocurred
+    //         console.log(error)
+    //     });
+    // }
     
     const updateUser = async (fn=null, field, data) => {
         try{
-            const nameRef = doc(db, "users", user.uid);
-            // Set the "fullName" field of the logged in user 
-            await updateDoc(nameRef, {
+            const userRef = doc(db, "users", user.uid);
+            await updateDoc(userRef, {
             [`${field}`]: data
             });
             console.log('Update done');
@@ -40,8 +65,27 @@ const Settingspage = () => {
             console.log(e);
         }
     }
-    // const replaceUploadChar = str => str.replaceAll('/', '+')
-    // const replaceDownChar = str => str.replaceAll('+','/')
+
+    const updateUserProfile = async () => {
+        try{
+            const res = await updateProfile(auth.currentUser, {
+                displayName: name,
+                photoURL: profileUrl
+            })
+            console.log(res)
+        }catch(e){
+            console.log(e);
+        }
+        // await updateProfile(auth.currentUser, {
+        //     displayName: name,
+        //     photoURL: profileUrl
+        //     }).then((user) => {
+        //         // Profile updated!
+        //         console.log('Profile Updated');
+        //     }).catch((error) => {
+        //         console.log(error);
+        //     });
+    }
 
     useEffect(()=>{
         const fetchCurrUser = async () => {
@@ -53,7 +97,7 @@ const Settingspage = () => {
               setBio(doc.data().bio)  
               setEmail(doc.data().email)  
               setAbout(doc.data().about)  
-              setProfileUrl(doc.data().photoUrl)  
+              setProfileUrl(doc.data().profileUrl)  
             });
             // console.log(name, currUser)
         }
@@ -98,117 +142,95 @@ const Settingspage = () => {
             }, 
             () => {
                 // Upload completed successfully, now we can get the download URL
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    console.log('File:', downloadURL);
+                getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
                     setProfileUrl(downloadURL)
-                    // console.log(typeof(downloadURL), downloadURL,'-', profileUrl );
-                    updateUser('profileUrl', downloadURL.toString())
-                    console.log(downloadURL.toString());
-                });
+                    const userRef = doc(db, "users", user.uid);
+                    await updateDoc(userRef, {
+                    'profileUrl': downloadURL
+                    });
+                    await updateUserProfile()
+                })
             }
             );
         }
 
         file && uploadImage()
+        // profileUrl && updateUser('profileUrl', profileUrl)
     },[file])
     
+    // profileUrl && updateUser('profileUrl', replaceUploadChar(profileUrl))
+    console.log(user);
     return ( 
         <div>
-            <nav className="w-full fixed top-0 z-40 bg-white dark:bg-dark-mode shadow-md">
-                <div className="container justify-between px-4 py-3 mx-auto sm:items-center sm:flex md:px-16">
-                <div>
-                    <div className="flex items-center justify-between">
-                    <span to={"/"}>
-                        <h2 className="text-2xl font-bold">LOGO</h2>
-                    </span>
-                    <div className="sm:hidden">
-                        <button
-                            className="py-2 text-gray-700 rounded-md outline-none"
-                            onClick={() => {setNavbar(!navbar)}}
-                        >
-                            {navbar ? (
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="w-6 h-6"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            ) : (
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="w-6 h-6"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth={2.4}
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                </svg>
-                            )}
-                        </button>
-                    </div>
-                    </div>
-                </div>
-                <div className="items-center sm:flex">
-                    {/* <div
-                    className={`flex-1 justify-self-center pb-3 mt-8 sm:block sm:pb-0 sm:mt-0 transition-all ${
-                        navbar ? "block" : "hidden"
-                    }`}
-                    >
-                        <ul className="items-center justify-center space-y-8 sm:flex sm:space-x-6 sm:space-y-0">
-                            <li className="text-gray-600 hover:text-blue-600">
-                                <a className={({isActive}) => 
-                                isActive ? "font-bold" : undefined
-                            } to={"/"}>Home</a>
-                            </li>
-                            <li className="text-gray-600 hover:text-blue-600">
-                                <a className={({isActive}) => 
-                                isActive ? "font-bold" : undefined
-                            } to={"/blog"}>Blog</a>
-                            </li>
-                            <li className="text-gray-600 hover:text-blue-600">
-                                <a className={({isActive}) => 
-                                isActive ? "font-bold" : undefined
-                            } to={"/about-us"}>About Us</a>
-                            </li>
-                            <li className="text-gray-600 hover:text-blue-600">
-                                <a to={"/"}>Contact US</a>
-                            </li>
-                            
+        <nav className="w-full fixed top-0 z-40 bg-white dark:bg-dark-mode shadow-md">
+        <div className="container justify-between px-4 py-3 mx-auto sm:items-center sm:flex md:px-16">
+          <div>
+            <div className="flex items-center justify-between">
+              <Link to={"/home"}>
+                  <h2 className="text-2xl font-bold">LOGO</h2>
+              </Link>
+              {/* <div className="sm:hidden">
+                  
+              </div> */}
+            </div>
+          </div>
 
-                        </ul>
-                    </div> */}
-                    
-                </div>
-                <div className={`mt-8 sm:flex sm:items-center sm:pb-1 sm:mt-0 ${navbar ? "block" : "hidden"}`}>
-                    {/* <a to={"/login"} className="border hover:bg-dark-mode hover:text-white transition-all bg-red-400 outline-none px-4 py-1 mr-3 rounded-md">Login</a> */}
-                    <button className="block mt-4 mr-3 sm:mt-0"><FaUser/></button>
-                    <Toggletheme/>
-                    </div>
-                </div>
-            </nav>
+
+          {/* <div className="items-center sm:flex"> */}
+            {/* <div
+              className={` justify-self-center pb-3 mt-8 sm:block sm:pb-0 sm:mt-0 transition-all ${
+                  navbar ? "block" : "hidden"
+              }`}
+              >
+              <ul className="items-center justify-center space-y-8 sm:flex sm:space-x-6 sm:space-y-0">
+                <li className="text-gray-600 hover:text-blue-600">
+                    <NavLink className={({isActive}) => 
+                      isActive ? "font-bold" : undefined
+                  } to={"/"}>Home</NavLink>
+                </li>
+                <li className="text-gray-600 hover:text-blue-600">
+                    <NavLink className={({isActive}) => 
+                      isActive ? "font-bold" : undefined
+                  } to={"/"}>Blog</NavLink>
+                </li>
+                <li className="text-gray-600 hover:text-blue-600">
+                    <NavLink className={({isActive}) => 
+                      isActive ? "font-bold" : undefined
+                  } to={"/"}>About Us</NavLink>
+                </li>
+                <li className="text-gray-600 hover:text-blue-600">
+                    <NavLink to={"/"}>Contact US</NavLink>
+                </li>
+                
+
+              </ul>
+            </div> */}
+            
+          {/* </div> */}
+
+          <div className={`mt-8 sm:flex sm:items-center sm:pb-1 sm:mt-0 ${navbar ? "block" : "hidden"}`}>
+            <Link to={"/login"} className="border hover:bg-dark-mode hover:text-white transition-all bg-red-400 outline-none px-4 py-1 mr-3 rounded-md">Login</Link>
+            <button className="block mt-4 mr-3 sm:mt-0"><FaUser/></button>
+            <Toggletheme/>
+          </div>
+        </div>
+      </nav>
+            
             {
                 currUser &&
-                <div className="container mx-auto flex pt-28 px-4 md:px-16">
-                    <aside className="basis-1/4 hidden md:block self-start sticky top-20">
+                <div className="container mx-auto flex pt-16 md:pt-28 px-4 md:px-16 ">
+                    <aside className="basis-1/4 hidden md:block self-start sticky top-10 ">
                         <h3 className="mb-7 text-2xl font-semibold">Settings</h3>
                         <ul>
                             <li className="mb-6 text-xl"><span>About you</span></li>
                             <li className="mb-6 text-xl"><span>Email settings</span></li>
                             <li className="mb-6 text-xl"><span>Security</span></li>
+                            <li className="mb-6 text-xl"><Link to={"/settings/posts"}>My Posts</Link></li>
                         </ul>
                     </aside>
-                    <main className="basis-full md:basis-3/4 ">
+                    
+                    <main className="basis-full md:basis-3/4 mb-20">
+                       
                         <h2 className="text-2xl mb-3 font-semibold">About you</h2>
                         <hr className="text-grey mb-8"/>
                         <div className="flex items-center justify-between mb-5">
@@ -225,7 +247,7 @@ const Settingspage = () => {
                             <div className="btn basis-1/3 text-end">
                                 {nameBool ? <>
                                 <button className="border rounded-full px-5 py-2 mr-2 border-red" onClick={(e) => updateUser(setNameBool, 'fullName', name)}>Save</button> 
-                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition">Cancel</button></> : 
+                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => cancelUserField(setNameBool)}>Cancel</button></> : 
                                 <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => editUserField(setNameBool)}>Edit</button>}       
                             </div>
                         </div>
@@ -243,7 +265,7 @@ const Settingspage = () => {
                             <div className="btn basis-1/3 text-end">
                                 {bioBool ? <>
                                 <button className="border rounded-full px-5 py-2 mr-2 border-pink" onClick={(e) => updateUser(setBioBool, 'bio', bio)}>Save</button> 
-                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition">Cancel</button></> : 
+                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => cancelUserField(setBioBool)}>Cancel</button></> : 
                                 <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => editUserField(setBioBool)}>Edit</button>}       
                             </div>
                         </div>
@@ -277,7 +299,7 @@ const Settingspage = () => {
                             <div className="btn basis-1/3 text-end">
                                 {aboutBool ? <>
                                 <button className="border rounded-full px-5 py-2 mr-2 border-red" onClick={(e) => updateUser(setAboutBool, 'about', about)}>Save</button> 
-                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition">Cancel</button>
+                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => cancelUserField(setAboutBool)}>Cancel</button>
                                 </> : <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => editUserField(setAboutBool)}>Edit</button>}       
                             </div>
                         </div>
@@ -296,24 +318,25 @@ const Settingspage = () => {
                             <div className="btn basis-1/3 text-end">
                                 {emailBool ? <>
                                 <button className="border rounded-full px-5 py-2 mr-2 border-red" onClick={(e) => updateUser(setEmailBool, 'email', email)}>Save</button> 
-                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition">Cancel</button>
+                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => cancelUserField(setEmailBool)}>Cancel</button>
                                 </> : <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => editUserField(setEmailBool)}>Edit email</button>}       
                             </div>
                         </div>
                         <h2 className="text-2xl mb-3 font-semibold" id="security">Security</h2>
                         <hr className="text-grey mb-8"/>
-                        <div className="flex items-center justify-between mb-5">
+                        <div className="flex items-center justify-between ">
                             <div className="mt-3 basis-1/2 ">
                                 <label className="font-semibold text-lg">Delete Account</label>
                                 <p className="text-sm leading-4">This will Delete the users account permanently</p>
                             </div>
-                            <div className="btn basis-1/3 text-end">
+                            <div className="btn basis-1/3 text-end ">
                                 {deleteBool ? <>
-                                <button className="border rounded-full px-5 py-2 mr-2 border-red" onClick={(e) => updateUser(setAboutBool)}>Yes</button> 
-                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition">No</button>
+                                <button className="border rounded-full px-5 py-2 mr-2 border-red"   >Yes</button> 
+                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => cancelUserField(setDeleteBool)}>No</button>
                                 </> : <button className="border border-pink rounded-full px-5 py-2 hover:border-gray transition" onClick={() => editUserField(setDeleteBool)}>Delete</button>}       
                             </div>
                         </div>
+                        <ManagePost/>
                     </main>
                 </div>
             }

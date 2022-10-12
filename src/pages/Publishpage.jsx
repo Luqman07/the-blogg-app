@@ -17,26 +17,28 @@ const Publishpage = ({handlePublish, data, setData}) => {
 
     const handlePost = async (e) => {
         e.preventDefault()
+        console.log(user.uid);
         let generatedId = uuidv4()
         try{
             const blogPost = {
                 ...data,
                 like: {
-                    likeCount: 0,
                     likedUsers: []
                 },
-                bookmarkedUsers: {
-                    bookmarkedBool: false,
-                    bookedmarkedUsers: []
+                bookmarkUsers: {
+                    bookmarkedList: []
                 },
                 blogId: generatedId,
                 isTrending: false, 
-                uid: user.uid,
-                displayName: user.displayName,
+                userPost: {
+                    uid: user.uid,
+                    displayName: user.displayName,
+                    userProfileUrl: user.photoURL,
+                    email: user.email
+                },
                 timeStamp: serverTimestamp()
             }
             setData({...data, snippet})
-            // const res = await addDoc(collection(db, "blogs"), blogPost);
             const res = await setDoc(doc(db, "blogs", generatedId), blogPost);
             console.log(res);
             navigate('/home')

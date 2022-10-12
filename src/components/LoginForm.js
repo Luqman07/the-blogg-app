@@ -16,7 +16,6 @@ const LoginForm = () => {
     function refreshPage() {
         window.location.reload(false);
     }
-    // user && console.log(user.user.uid);
     const handleSubmit = async (e) => {
         e.preventDefault()
         if(email === "" || password === ""){

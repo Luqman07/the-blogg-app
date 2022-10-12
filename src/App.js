@@ -14,6 +14,9 @@ import { useContext, useState } from "react";
 import { AuthContext } from "./context/authContext";
 import { Navigate } from "react-router-dom"
 import Bookmarkpage from "./pages/Bookmarkpage";
+import 'react-loading-skeleton/dist/skeleton.css'
+import MobileNav from "./components/MobileNav";
+import ManagePost from "./components/ManagePost";
 
 function App() {
   const { pathname } = useLocation()
@@ -37,13 +40,16 @@ function App() {
             <Route path="new-blog" element={<RequireAuth><NewBlog /></RequireAuth>} />
             <Route path="publish" element={<RequireAuth><Publishpage /></RequireAuth>} />
             <Route path=":userId" element={<Userpage />} />
-            <Route path="settings" element={<Settingspage />} />
+            <Route path="settings" element={<Settingspage />} >
+              {/* <Route path="posts" element={<ManagePost/>} /> */}
+            </Route>
             <Route path="bookmark" element={<Bookmarkpage />} />
-            <Route path="/blog/:id" element={<Blogdetailpage setLikeCount={setLikeCount} likeCount={likeCount}/>} />
+            <Route path="/blog/:id" element={<RequireAuth><Blogdetailpage setLikeCount={setLikeCount} likeCount={likeCount}/> </RequireAuth>} />
             <Route path="topic/:topic" element={<Topicdetailpage />} />
           </Routes>
         )
       }
+      <MobileNav />
     </div>
   );
 }

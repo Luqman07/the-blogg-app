@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import Publishpage from "../pages/Publishpage";
 import Toggletheme from "./Toggletheme"
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { useEffect } from "react";
+import { AuthContext } from "../context/authContext";
 
 
 const NewBlog = () => {
@@ -13,12 +13,15 @@ const NewBlog = () => {
     const [file, setFile] = useState(null)
     const [data, setData] = useState({})
     const [published, isPublished] = useState(false)
-    
+    const [isLoading, setIsLoading] = useState(false)
+    const {user} = useContext(AuthContext)
+
     useEffect(() =>{
         const storage = getStorage();
         const uploadImage = () => {
             const storageRef = ref(storage, 'images/' + file.name);
             const uploadTask = uploadBytesResumable(storageRef, file);
+            setIsLoading(true)
     
             // Listen for state changes, errors, and completion of the upload.
             uploadTask.on('state_changed',
@@ -54,8 +57,9 @@ const NewBlog = () => {
             () => {
                 // Upload completed successfully, now we can get the download URL
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                console.log('File available at', downloadURL);
+                    console.log('File available at', downloadURL);
                     setData((prev) => ({...prev, img: downloadURL}))
+                    setIsLoading(false)
                 });
             }
             );
@@ -80,10 +84,10 @@ const NewBlog = () => {
             <header className="flex justify-between items-center h-20 px-16">
                 <div className="logo flex items-center ">
                     <h2>LOGO</h2>
-                    <p className="ml-4">Draft in Luqman Adeniyi</p>
+                    <p className="ml-4">Draft in {user.displayName}</p>
                 </div>
                 <div className="flex items-center gap-x-4">
-                    <button onClick={handlePublish} className="px-4 py-0.5 text-white rounded-full cursor-pointer bg-blue inline-block mr-2">Publish</button>
+                    <button onClick={handlePublish} disabled={isLoading} className="px-4 py-0.5 text-white rounded-full cursor-pointer bg-blue inline-block mr-2">Publish</button>
                     <FaUserCircle size={27}/>
                     <Toggletheme />
                 </div>

@@ -2,12 +2,12 @@ import LeftSidebar from "../components/LeftSidebar"
 import Userblogs from "../components/Userblogs"
 import {useParams} from "react-router-dom"
 const Userpage = () => {
-    const {user} = useParams()
-    console.log(user);
+    const {userId} = useParams()
+    console.log(userId);
     return(
         <section>
             <LeftSidebar />
-            <Userblogs userInfo={user}/>
+            <Userblogs userInfo={userId}/>
         </section>
     )
 }
