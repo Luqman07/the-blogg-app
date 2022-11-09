@@ -10,6 +10,7 @@ import { BlogCardLoading } from "../utils";
 
 const Userblogs = () => {
     const [userBlogs, setUserBlogs] = useState([]) 
+    const [userInfo, setUserInfo] = useState([])
     const { userId } = useParams()
     console.log(userId);
     useEffect(()=>{
@@ -25,16 +26,31 @@ const Userblogs = () => {
             console.log(list[0].userPost);
             setUserBlogs(list)
         }
-        fetchUserBlog()
+
+        const fetchUserInfo = async (uid) => {
+            const q = query(collection(db, "users"), where("id", "==", uid));
+            const querySnapshot = await getDocs(q);
         
+            let list = [];
+            querySnapshot.forEach((doc) => {
+              list.push(doc.data())
+              console.log(list);
+              setUserInfo(list);   
+            });
+
+            console.log(userInfo); 
+        }
+
+        fetchUserBlog()
+        fetchUserInfo(userId)
     }, [userId])
 
      
     return ( 
-        <section className="ml-20  min-h-full flex ">
-            <div className="py-12 px-20 w-full">
+        <section className="sm:ml-20 min-h-full flex ">
+            <div className="py-12 px-5 w-full sm:px-10 md:px-20 md:w-[70%]">
                 <header>
-                    <h1 className="font-bold mb-10 text-5xl">{userBlogs[0]?.userPost.displayName}</h1>
+                    <h1 className="font-bold mb-10 text-3xl md:text-5xl">{userBlogs[0]?.userPost.displayName}</h1>
                     <div className="border-b border-lightGray pb-[.8rem]">
                         <button className="border-b -mb-[5rem] pb-[.8rem] border-black/70">Posts</button>
                     </div>
@@ -48,7 +64,7 @@ const Userblogs = () => {
                 </main>
 
             </div>
-            {userBlogs.length > 0 && <Userinfo peek={userBlogs[0].userPost}/>}
+            {userInfo.length > 0 && <Userinfo peek={userInfo[0]}/>}
         </section>
      );
 }

@@ -1,38 +1,26 @@
-import {Link} from "react-router-dom"
-import { FaHome, FaRegBookmark, FaPen, FaUserCircle, FaRegBell } from "react-icons/fa"
-import { useContext } from "react";
-import { AuthContext } from "../context/authContext";
+import {Link, useLocation} from "react-router-dom"
+import { FaUserCircle } from "react-icons/fa"
 import Toggletheme from "./Toggletheme";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { Bookmark, BookmarkFill, Home, HomeFill, Write } from "../utils";
+
 
 const LeftSidebar = () => {
-    const { dispatch } = useContext(AuthContext)
+    const {pathname} = useLocation()
 
-    const handleLogout = async () => {
-        try{
-            await signOut(auth)
-            dispatch({type: "LOGOUT", payload: null})
-
-        }catch(err){
-            console.log(err)
-        }
-    }
     return ( 
         <section className=" fixed left-0 w-20 border-r border-lightGray min-h-screen overflow-y-auto hidden sm:block">
             <div className="mt-12">
-                <Link to={"/home"}><h3 className="bold text-center font-bold mb-16">LOGO</h3></Link>
+                <Link to={"/"}><h3 className="bold text-center font-bold mb-16">LOGO</h3></Link>
                 <ul>
-                    <li className="mb-12"><Link className="block" to={"/home"}><FaHome className="mx-auto text-dark-mode" size={25} /></Link></li>
-                    <li className="mb-12"><Link className="block" to={"/bookmark"}><FaRegBookmark className="mx-auto" size={20}/></Link></li>
-                    <li className="mb-12"><Link className="block" to={"#"}><FaRegBell className="mx-auto" size={20}/></Link></li>
+                    <li className="mb-12"><Link className="block" to={"/"}>{pathname === "/" ? <HomeFill/> : <Home/>}</Link></li>
+                    <li className="mb-12"><Link className="block" to={"/bookmark"}>{pathname === "/bookmark" ? <BookmarkFill/> : <Bookmark/>}</Link></li>
                 </ul>
                 <hr className="w-5 mt-5 mx-auto"/>
                 <ul className="mt-6">
-                    <li className="flex justify-center py-2"><Toggletheme /></li>
-                    <li className="mb-24 mt-10"><Link className="block" to={"/new-blog"}><FaPen className="mx-auto" size={18}/></Link></li>
-                    <li><Link className="block" to={"#"}><FaUserCircle className="mx-auto" size={30}/></Link></li>
-                    <li className="mt-3"><button className="border-none p-1 rounded block mx-auto bg-green text-white" onClick={handleLogout}>Log Out</button></li>
+                    <li className="mb-12 mt-10"><Link className="block" to={"/new-blog"}><Write/></Link></li>
+                    <li className="flex justify-center py-2 mb-24"><Toggletheme /></li>
+                    <li><Link className="block" to={"/settings"}><FaUserCircle className="mx-auto" size={30}/></Link></li>
+                    {/* <li className="mt-3"><button className="border-none p-1 rounded block mx-auto bg-green text-white" onClick={handleLogout}>Log Out</button></li> */}
                 </ul>
             </div>
         </section>

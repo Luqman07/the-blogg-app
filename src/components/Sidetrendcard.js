@@ -1,12 +1,12 @@
 import { letter } from "../utils";
 const Sidetrendcard = ({blog}) => {
- 
+ console.log(blog?.userPost);
     return ( 
         <section>
             <div className="blog mt-3">
                 <div className="flex">
                 <picture className="img w-6 h-6 rounded-full  mr-2">
-                            {blog?.userPost.userProfileUrl ? <img src={blog?.userPost.userProfileUrl} alt="" /> : <div className="w-6 h-6 rounded-full bg-green font-bold text-white flex justify-center items-center"><span>{letter(blog.userPost.displayName)}</span></div>}
+                            {blog?.userPost.userProfileUrl ? <img src={blog?.userPost.userProfileUrl} alt="" /> : <div className="w-6 h-6 rounded-full bg-green font-bold text-white flex justify-center items-center"><span>{letter(blog?.userPost.displayName)}</span></div>}
                         </picture>
                     {/* <p className="username text-sm">{blog.username}</p> */}
                 </div>

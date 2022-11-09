@@ -70,16 +70,14 @@ const Navbar = () => {
                 <li className="text-gray-600 hover:text-blue-600">
                     <NavLink className={({isActive}) => 
                       isActive ? "font-bold" : undefined
-                  } to={"/"}>Blog</NavLink>
+                  } to={"#trends"}>Trending</NavLink>
                 </li>
                 <li className="text-gray-600 hover:text-blue-600">
                     <NavLink className={({isActive}) => 
                       isActive ? "font-bold" : undefined
-                  } to={"/"}>About Us</NavLink>
+                  } to={"#blogs"}>Blogs</NavLink>
                 </li>
-                <li className="text-gray-600 hover:text-blue-600">
-                    <NavLink to={"/"}>Contact US</NavLink>
-                </li>
+                
                 
 
               </ul>

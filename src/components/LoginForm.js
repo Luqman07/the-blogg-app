@@ -13,9 +13,7 @@ const LoginForm = () => {
     const navigate = useNavigate()
 
 
-    function refreshPage() {
-        window.location.reload(false);
-    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         if(email === "" || password === ""){
@@ -29,10 +27,10 @@ const LoginForm = () => {
         try{
             const {user} = await signInWithEmailAndPassword(auth, email, password)
 
-            dispatch({type: 'LOGIN', payload: {user}})
+            dispatch({type: 'LOGIN', payload: user})
             localStorage.setItem('user', user)
-            navigate("/home")
-            refreshPage()
+            navigate("/")
+            // refreshPage()
         }catch(err){
             setError(err.errorCode)
             console.log(err);

@@ -26,8 +26,9 @@ const Comment = ({ blog, setComments, comments }) => {
                 userId: user.uid,
                 displayName: user.displayName,
                 dp: use.profileUrl,
-                timeStamp: serverTimestamp(),
+                timeStamp: new Date(),
             }
+            console.log(serverTimestamp().seconds);
             setComments([...comments, commentPost])
             await setDoc(doc(db, "comments", generatedId), commentPost);
             

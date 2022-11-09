@@ -10,11 +10,13 @@ const Publishpage = ({handlePublish, data, setData}) => {
     const [topic, setTopic] = useState('')
     const {user} = useContext(AuthContext)
     const navigate = useNavigate()
- 
-    useEffect(() => {
-       setData(data =>  ({...data, snippet, topic}))
-    },[setData ,snippet, topic])
+    const [canPublish, setCanPublish] = useState(true) 
 
+    const validation = () => {
+        if (snippet && topic) {
+            setCanPublish(false)
+        }
+    }
     const handlePost = async (e) => {
         e.preventDefault()
         console.log(user.uid);
@@ -40,15 +42,15 @@ const Publishpage = ({handlePublish, data, setData}) => {
             }
             setData({...data, snippet})
             const res = await setDoc(doc(db, "blogs", generatedId), blogPost);
-            console.log(res);
-            navigate('/home')
-            // console.log(data, snippet, topic, user);
-
+            navigate('/')
         }catch(err){
             console.error(err);
         }
-        // navigate("/home")
     }
+    useEffect(() => {
+       setData(data =>  ({...data, snippet, topic}))
+       validation()
+    },[setData ,snippet, topic])
     return ( 
         <section className="container mx-auto px-4 md:px-16 min-h-screen flex justify-center items-center">
             <span onClick={handlePublish} className="fixed right-48 top-10">
@@ -70,6 +72,7 @@ const Publishpage = ({handlePublish, data, setData}) => {
                     <div className="mx-auto mb-3 ">
                         <input className="w-full h-10 border-b border-black/50 outline-none rounded px-2 dark:text-dark-mode" 
                         onChange={(e) => setSnippet(e.target.value)}
+                        onKeyDown={validation}
                         value={snippet}
                         type="text" placeholder="Blog snippet"/>
                     </div>
@@ -77,13 +80,13 @@ const Publishpage = ({handlePublish, data, setData}) => {
                 <section className="basis-1/2">
                     <h4 className="font-semibold mb-5">Publishing to: Luqman</h4>
                     <p>Add a topic</p>
-                    <select onChange={(e) => setTopic(e.target.value)} name="" className="w-full h-10 border border-black/50 mb-5 outline-none rounded px-2 dark:text-dark-mode">
+                    <select onChange={(e) => {setTopic(e.target.value)}} name="" className="w-full h-10 border border-black/50 mb-5 outline-none rounded px-2 dark:text-dark-mode">
                         <option value="">Choose a topic</option>
                         <option value="Sport">Sport</option>
                         <option value="Entertainment">Entertainment</option>
                         <option value="Fashion">Fashion</option>
                     </select>
-                    <button className="px-4 py-0.5 text-white rounded-full cursor-pointer bg-blue inline-block mr-2">Publish</button>
+                    <button disabled={canPublish} className="px-4 py-0.5 text-white rounded-full cursor-pointer bg-blue inline-block mr-2">Publish</button>
                 </section>
             </form>
 

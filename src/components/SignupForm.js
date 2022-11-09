@@ -34,7 +34,7 @@ const SignupForm = () => {
         
         try{
             const { user } = await createUserWithEmailAndPassword(auth, email, password)
-            dispatch({type: 'LOGIN', payload: {user}})
+            dispatch({type: 'LOGIN', payload: user})
             const data = { 
               id: user.uid,
               fullName,

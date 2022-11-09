@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, where, query} from "firebase/firestore";
 import { db } from "../firebase";
 import LeftSidebar from "../components/LeftSidebar"
 import Userinfo from "../components/Userinfo";
@@ -11,6 +11,7 @@ import { BlogCardLoading } from "../utils";
 const Bookmarkpage = () => {
     const [bookmarks, setBookmarks] = useState([]) 
     const [error, setError] = useState('') 
+    const [userInfo, setUserInfo] = useState([]) 
 
     const {user} = useContext(AuthContext)
 
@@ -35,14 +36,31 @@ const Bookmarkpage = () => {
                 console.log(error);
             }
         }
+        const fetchUserInfo = async (uid) => {
+            try{
+                const q = query(collection(db, "users"), where("id", "==", uid));
+                const querySnapshot = await getDocs(q);
+            
+                let list = [];
+                querySnapshot.forEach((doc) => {
+                    list.push(doc.data())
+                    console.log(list);
+                });
+
+                setUserInfo(list);
+            }catch(e){
+                console.log(e);
+            }    
+        }
         fetchBookmark()
-    }, [user.uid])
+        fetchUserInfo(user.uid)
+    }, [user.uid, error])
 
     return(
         <section>
             <LeftSidebar />
-            <section className="md:ml-20  min-h-full flex ">
-            <div className="py-12 px-4 md:px-20 w-full">
+            <section className="sm:ml-20  min-h-full flex ">
+            <div className="py-12 px-4 sm:px-10 md:px-20 w-full">
                 <header>
                     {/* <h1 className="font-bold mb-10 text-5xl">{userBlogs && userBlogs[0].displayName}</h1> */}
                     <div className="border-b border-lightGray pb-[.8rem]">
@@ -60,7 +78,7 @@ const Bookmarkpage = () => {
                 </main>
 
             </div>
-            <Userinfo peek={bookmarks[0]?.userPost} />
+            <Userinfo peek={userInfo[0]} />
         
         </section>
         </section>

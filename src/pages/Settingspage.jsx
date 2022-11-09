@@ -1,17 +1,18 @@
 // import { getAuth, deleteUser, AuthCredential } from "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { FaCamera, FaUser } from 'react-icons/fa';
 import Toggletheme from "../components/Toggletheme";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth } from "../firebase"
-import { updateProfile, reauthenticateWithCredential, deleteUser, AuthCredential } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import { Link } from "react-router-dom";
 import ManagePost from "../components/ManagePost";
+import { signOut } from "firebase/auth";
+
 
 const Settingspage = () => {
     const [navbar, setNavbar] = useState(false);
@@ -27,10 +28,11 @@ const Settingspage = () => {
     const [profileUrl, setProfileUrl] = useState(null)
     const [email, setEmail] = useState('')
     const [file, setFile] = useState(null)
-    const {user} = useContext(AuthContext)
+    const {user, dispatch} = useContext(AuthContext)
 
     const editUserField = (fn) => fn(true)
     const cancelUserField = (fn) => fn(false)
+    console.log(user)
 
     // const reAuthenticateUser = () => {
     //     // const credential = promptForCredentials();
@@ -53,6 +55,14 @@ const Settingspage = () => {
     //     });
     // }
     
+    const logout = async () => {
+        try{
+            await signOut(auth)
+            dispatch({type: "LOGOUT", payload: null})
+        }catch(err){
+            console.log(err)
+        }
+    }
     const updateUser = async (fn=null, field, data) => {
         try{
             const userRef = doc(db, "users", user.uid);
@@ -67,24 +77,16 @@ const Settingspage = () => {
     }
 
     const updateUserProfile = async () => {
-        try{
-            const res = await updateProfile(auth.currentUser, {
-                displayName: name,
-                photoURL: profileUrl
-            })
-            console.log(res)
-        }catch(e){
-            console.log(e);
-        }
-        // await updateProfile(auth.currentUser, {
-        //     displayName: name,
-        //     photoURL: profileUrl
-        //     }).then((user) => {
-        //         // Profile updated!
-        //         console.log('Profile Updated');
-        //     }).catch((error) => {
-        //         console.log(error);
-        //     });
+        
+        await updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: profileUrl
+            }).then((user) => {
+                // Profile updated!
+                console.log('Profile Updated');
+            }).catch((error) => {
+                console.log(error);
+            });
     }
 
     useEffect(()=>{
@@ -148,7 +150,7 @@ const Settingspage = () => {
                     await updateDoc(userRef, {
                     'profileUrl': downloadURL
                     });
-                    await updateUserProfile()
+                    updateUserProfile()
                 })
             }
             );
@@ -169,47 +171,48 @@ const Settingspage = () => {
               <Link to={"/home"}>
                   <h2 className="text-2xl font-bold">LOGO</h2>
               </Link>
-              {/* <div className="sm:hidden">
-                  
-              </div> */}
+              <div className="sm:hidden">
+                  <button
+                      className="py-2 text-gray-700 rounded-md outline-none"
+                      onClick={() => {setNavbar(!navbar)}}
+                  >
+                      {navbar ? (
+                          <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-6 h-6"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                          >
+                              <path
+                                  fillRule="evenodd"
+                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                  clipRule="evenodd"
+                              />
+                          </svg>
+                      ) : (
+                          <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-6 h-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2.4}
+                          >
+                              <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M4 6h16M4 12h16M4 18h16"
+                              />
+                          </svg>
+                      )}
+                  </button>
+              </div> 
             </div>
           </div>
 
 
-          {/* <div className="items-center sm:flex"> */}
-            {/* <div
-              className={` justify-self-center pb-3 mt-8 sm:block sm:pb-0 sm:mt-0 transition-all ${
-                  navbar ? "block" : "hidden"
-              }`}
-              >
-              <ul className="items-center justify-center space-y-8 sm:flex sm:space-x-6 sm:space-y-0">
-                <li className="text-gray-600 hover:text-blue-600">
-                    <NavLink className={({isActive}) => 
-                      isActive ? "font-bold" : undefined
-                  } to={"/"}>Home</NavLink>
-                </li>
-                <li className="text-gray-600 hover:text-blue-600">
-                    <NavLink className={({isActive}) => 
-                      isActive ? "font-bold" : undefined
-                  } to={"/"}>Blog</NavLink>
-                </li>
-                <li className="text-gray-600 hover:text-blue-600">
-                    <NavLink className={({isActive}) => 
-                      isActive ? "font-bold" : undefined
-                  } to={"/"}>About Us</NavLink>
-                </li>
-                <li className="text-gray-600 hover:text-blue-600">
-                    <NavLink to={"/"}>Contact US</NavLink>
-                </li>
-                
-
-              </ul>
-            </div> */}
-            
-          {/* </div> */}
-
           <div className={`mt-8 sm:flex sm:items-center sm:pb-1 sm:mt-0 ${navbar ? "block" : "hidden"}`}>
-            <Link to={"/login"} className="border hover:bg-dark-mode hover:text-white transition-all bg-red-400 outline-none px-4 py-1 mr-3 rounded-md">Login</Link>
+            {!user &&<Link to={"/login"} className="border hover:bg-dark-mode hover:text-white transition-all bg-red-400 outline-none px-4 py-1 mr-3 rounded-md">Login</Link>}
             <button className="block mt-4 mr-3 sm:mt-0"><FaUser/></button>
             <Toggletheme/>
           </div>
@@ -323,7 +326,7 @@ const Settingspage = () => {
                             </div>
                         </div>
                         <h2 className="text-2xl mb-3 font-semibold" id="security">Security</h2>
-                        <hr className="text-grey mb-8"/>
+                        {/* <hr className="text-grey mb-8"/>
                         <div className="flex items-center justify-between ">
                             <div className="mt-3 basis-1/2 ">
                                 <label className="font-semibold text-lg">Delete Account</label>
@@ -335,8 +338,17 @@ const Settingspage = () => {
                                 <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => cancelUserField(setDeleteBool)}>No</button>
                                 </> : <button className="border border-pink rounded-full px-5 py-2 hover:border-gray transition" onClick={() => editUserField(setDeleteBool)}>Delete</button>}       
                             </div>
-                        </div>
+                        </div> */}
                         <ManagePost/>
+                        <div className="flex items-center justify-between mb-5">
+                            <div className="mt-3 basis-1/2 ">
+                                <label className="font-semibold text-lg">Logout</label>
+                                
+                            </div>
+                            <div className="btn basis-1/3 text-end">
+                                <button className="rounded-full px-5 py-2 bg-green transition" onClick={logout}>Logout</button>       
+                            </div>
+                        </div>
                     </main>
                 </div>
             }
