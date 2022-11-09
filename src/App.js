@@ -43,7 +43,7 @@ function App() {
           </Routes>
         )
       }
-      { pathname !== '/login' && pathname !== '/signup'  && <MobileNav/> }
+      { pathname !== '/login' && pathname !== '/signup' && user && <MobileNav/> }
     </div>
   );
 }
