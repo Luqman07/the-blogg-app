@@ -12,7 +12,9 @@ const LoginForm = () => {
     const { dispatch } = useContext(AuthContext)
     const navigate = useNavigate()
 
-
+    const handleHome = ()=>{
+        navigate("/")
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -35,10 +37,9 @@ const LoginForm = () => {
             setError(err.errorCode)
             console.log(err);
         }
-            // setError('')
-        
-        
     }
+
+
     return ( 
         <form onSubmit={handleSubmit} className="rounded-lg py-5 px-9 bg-darkBackground text-grey dark:bg-darkBackground dark:text-grey">
             <h4 className="text-center font-semibold mb-5 text-3xl">Login</h4>
@@ -65,6 +66,8 @@ const LoginForm = () => {
             <p>Email: {email}</p>
             <p>Password: {password}</p>
             <p className="text-pink">{error}</p>
+
+            <button className="fixed top-10 left-4 bg-gray-dark p-3 font-semibold rounded" onClick={handleHome}>Home</button>
         </form>
      );
 }

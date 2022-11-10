@@ -117,7 +117,7 @@ const Blogdetailpage = ({likeCount, setLikeCount}) => {
         fetchBlog()
         fetchComment()
         blog.length > 0 && fetchUserInfo()
-    }, [id, user.uid])
+    }, [id, blog.length ,user.uid])
     
 
     return ( 
