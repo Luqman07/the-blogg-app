@@ -11,7 +11,7 @@ const Slidersection = ({blogs}) => {
     speed: 500,
     slidesToShow: 4,
     arrows: false,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 1000,
     slidesToScroll: 2,
     responsive: [
@@ -51,21 +51,6 @@ const Slidersection = ({blogs}) => {
               <CardCarousel image={blog.img} blog={blog}/>
             </div>
           ))}
-          {/* <div>
-            <CardCarousel image={img2} />
-          </div>
-          <div>
-            <CardCarousel image={img3} />
-          </div>
-          <div>
-            <CardCarousel image={img3} />
-          </div>
-          <div>
-            <CardCarousel image={img3} />
-          </div>
-          <div>
-            <CardCarousel image={img3} />
-          </div> */}
         </Slider>
       </div>
     </div>

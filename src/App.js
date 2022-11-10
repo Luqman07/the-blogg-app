@@ -44,7 +44,7 @@ function App() {
         )
       }
       {console.log(user)}
-      { pathname !== '/login' && pathname !== '/signup' && (user !== null && pathname === "/")  && <MobileNav/> }
+      { pathname !== '/login' && pathname !== '/signup' && user  && <MobileNav/> }
     </div>
   );
 }
