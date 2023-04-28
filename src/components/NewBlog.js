@@ -100,7 +100,7 @@ const NewBlog = () => {
 
             <form className="px-5">
                 <div className=" max-w-4xl mx-auto mb-10 ">
-                    <input className="w-full h-20 border border-black/20 outline-none text-2xl rounded px-2 dark:text-dark-mode" 
+                    <input className="w-full h-20 border-0 border-b border-black/20 outline-none text-2xl rounded px-2 dark:text-dark-mode" 
                     onChange={e => setTitle(e.target.value) }
                     onKeyDown={validation}
                     value={title} 
@@ -108,12 +108,12 @@ const NewBlog = () => {
                     placeholder="Title"/>
                 </div>
                 <div className=" max-w-4xl mx-auto mb-10">
-                    <textarea className="w-full h-32 border rounded border-black/30 outline-none text-xl px-2 dark:text-dark-mode" 
+                    <textarea className="w-full h-32 border-0 border-b rounded border-black/30 outline-none text-xl px-2 dark:text-dark-mode" 
                     onChange={e => setDescription(e.target.value)}
                     onKeyDown={validation}
                     value={description}
                     type="text" 
-                    placeholder="Blog description"></textarea>
+                    placeholder="Write"></textarea>
                 </div>
                 <div className=" max-w-4xl mx-auto ">
                     <input type="file" name="" onChange={(e) => {setFile(e.target.files[0]);}} />

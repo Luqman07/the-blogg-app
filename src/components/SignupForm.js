@@ -18,7 +18,7 @@ const SignupForm = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // setError('')
+        setError('')
         if(email === "" || password === "" || email === "" || confirmPassword === ""){
             setError('Fields required')
             return
@@ -100,9 +100,9 @@ const SignupForm = () => {
             </div>
             
             {" "}
-            <p>mail: {email}</p>
-            <p>User password: {password}</p>
-            {error && <p>{error}</p>}
+            {/* <p>mail: {email}</p>
+            <p>User password: {password}</p> */}
+            {error && <p className="text-red mt-4">{error}</p>}
         </form>
      );
 }

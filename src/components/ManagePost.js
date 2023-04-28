@@ -49,7 +49,7 @@ const ManagePost = () => {
                     {<section className="flex flex-col gap-y-10">
                         {   
                             userPosts.length > 0 ? userPosts.map((blog, index) => <div key={index}><BlogCard blog={blog} userId={user.uid}/>
-                            <div className="border-b py-4"><button className="bg-pink px-5 py-2 text-right mx-auto font-medium rounded-full" onClick={()=>deletePost(blog.blogId, blog)}>Delete</button></div></div>) : 
+                            <div className="border-b py-4"><button className="bg-red px-5 py-2 text-right mx-auto font-medium rounded-full" onClick={()=>deletePost(blog.blogId, blog)}>Delete</button></div></div>) : 
                             error ? <p>No Post</p> : <><BlogCardLoading/><BlogCardLoading/><BlogCardLoading/></>
                         }
                     </section> }    

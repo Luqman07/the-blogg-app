@@ -8,7 +8,7 @@ import { AuthContext } from "../context/authContext";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth } from "../firebase"
-import { updateProfile } from "firebase/auth";
+import { updateProfile, deleteUser } from "firebase/auth";
 import { Link } from "react-router-dom";
 import ManagePost from "../components/ManagePost";
 import { signOut } from "firebase/auth";
@@ -87,6 +87,17 @@ const Settingspage = () => {
             }).catch((error) => {
                 console.log(error);
             });
+    }
+
+    const handleDelete = async () => {
+        const user = auth.currentUser;
+        deleteUser(user).then(() => {
+        // User deleted.
+            console.log('Deleted')
+        }).catch((error) => {
+            // An error ocurred
+            console.log(error)
+        });
     }
 
     useEffect(()=>{
@@ -168,7 +179,7 @@ const Settingspage = () => {
         <div className="container justify-between px-4 py-3 mx-auto sm:items-center sm:flex md:px-16">
           <div>
             <div className="flex items-center justify-between">
-              <Link to={"/home"}>
+              <Link to={"/"}>
                   <h2 className="text-2xl font-bold">LOGO</h2>
               </Link>
               <div className="sm:hidden">
@@ -267,7 +278,7 @@ const Settingspage = () => {
                             </div>
                             <div className="btn basis-1/3 text-end">
                                 {bioBool ? <>
-                                <button className="border rounded-full px-5 py-2 mr-2 border-pink" onClick={(e) => updateUser(setBioBool, 'bio', bio)}>Save</button> 
+                                <button className="border rounded-full px-5 py-2 mr-2 border-red" onClick={(e) => updateUser(setBioBool, 'bio', bio)}>Save</button> 
                                 <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => cancelUserField(setBioBool)}>Cancel</button></> : 
                                 <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => editUserField(setBioBool)}>Edit</button>}       
                             </div>
@@ -326,19 +337,7 @@ const Settingspage = () => {
                             </div>
                         </div>
                         <h2 className="text-2xl mb-3 font-semibold" id="security">Security</h2>
-                        {/* <hr className="text-grey mb-8"/>
-                        <div className="flex items-center justify-between ">
-                            <div className="mt-3 basis-1/2 ">
-                                <label className="font-semibold text-lg">Delete Account</label>
-                                <p className="text-sm leading-4">This will Delete the users account permanently</p>
-                            </div>
-                            <div className="btn basis-1/3 text-end ">
-                                {deleteBool ? <>
-                                <button className="border rounded-full px-5 py-2 mr-2 border-red"   >Yes</button> 
-                                <button className="border border-lightGray rounded-full px-5 py-2 hover:border-gray transition" onClick={() => cancelUserField(setDeleteBool)}>No</button>
-                                </> : <button className="border border-pink rounded-full px-5 py-2 hover:border-gray transition" onClick={() => editUserField(setDeleteBool)}>Delete</button>}       
-                            </div>
-                        </div> */}
+                        
                         <ManagePost/>
                         <div className="flex items-center justify-between mb-5">
                             <div className="mt-3 basis-1/2 ">
@@ -346,9 +345,18 @@ const Settingspage = () => {
                                 
                             </div>
                             <div className="btn basis-1/3 text-end">
-                                <button className="rounded-full px-5 py-2 bg-green transition" onClick={logout}>Logout</button>       
+                                <button className="rounded-full px-5 py-2 bg-red text-white font-semibold transition" onClick={logout}>Logout</button>       
                             </div>
                         </div>
+                        {/* <div className="flex items-center justify-between mb-5">
+                            <div className="mt-3 basis-1/2 ">
+                                <label className="font-semibold text-lg">Delete Account</label>
+                                
+                            </div>
+                            <div className="btn basis-1/3 text-end">
+                                <button className="rounded-full px-5 py-2 bg-red text-white font-semibold transition" onClick={handleDelete}>Delete</button>       
+                            </div>
+                        </div> */}
                     </main>
                 </div>
             }

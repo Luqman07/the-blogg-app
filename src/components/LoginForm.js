@@ -32,7 +32,6 @@ const LoginForm = () => {
             dispatch({type: 'LOGIN', payload: user})
             localStorage.setItem('user', user)
             navigate("/")
-            // refreshPage()
         }catch(err){
             setError(err.errorCode)
             console.log(err);
@@ -63,9 +62,7 @@ const LoginForm = () => {
             <div className="text-center">
                 <button className="hover:bg-dark-mode hover:text-grey transition-all border w-1/3 py-1 rounded">Login</button>
             </div>
-            <p>Email: {email}</p>
-            <p>Password: {password}</p>
-            <p className="text-pink">{error}</p>
+            <p className="text-red">{error}</p>
 
             <button className="fixed top-10 left-4 bg-gray-dark p-3 font-semibold rounded" onClick={handleHome}>Home</button>
         </form>

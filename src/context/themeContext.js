@@ -6,19 +6,15 @@ export const ThemeContextProvider = ({ children }) => {
   useEffect(() => {
     if(localStorage.getItem('theme') === 'dark'){
       setTheme('dark')
-      // console.log(localStorage.getItem('theme'));
     }else{
       setTheme('light')
-      // console.log(localStorage.getItem('theme'));
     }
   }, [])
   useEffect(() => {
     if(theme === 'dark'){
       document.documentElement.classList.add('dark')
-      // console.log(localStorage.getItem('theme'));
     }else{
       document.documentElement.classList.remove('dark')
-      // console.log(localStorage.getItem('theme'));
     }
   }, [theme])
   

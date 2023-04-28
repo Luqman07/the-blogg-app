@@ -1,12 +1,30 @@
 import { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaUser } from 'react-icons/fa';
 import Toggletheme from "./Toggletheme";
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
+  // const [link, setLink] = useState(null)
   console.log(navbar);
-  
+  const scrollBehaviour = (param) => {
+    if(param === 'trend'){
+      window.scrollTo({
+        top: 420,
+        behavior: "smooth"
+      });
+    }else if(param === 'blogs'){
+      window.scrollTo({
+        top: 700,
+        behavior: "smooth"
+      });
+    }else{
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+  }
   return (
       <nav className="w-full fixed top-0 z-40 bg-white dark:bg-dark-mode shadow-md">
         <div className="container justify-between px-4 py-3 mx-auto sm:items-center sm:flex md:px-16">
@@ -63,19 +81,19 @@ const Navbar = () => {
               >
               <ul className="items-center justify-center space-y-8 sm:flex sm:space-x-6 sm:space-y-0">
                 <li className="text-gray-600 hover:text-blue-600">
-                    <NavLink className={({isActive}) => 
-                      isActive ? "font-bold" : undefined
-                  } to={"/"}>Home</NavLink>
+                <span className="cursor-pointer font-bold" onClick={() => scrollBehaviour("")}>Home</span>
                 </li>
                 <li className="text-gray-600 hover:text-blue-600">
-                    <NavLink className={({isActive}) => 
+                    {/* <NavLink className={({isActive}) => 
                       isActive ? "font-bold" : undefined
-                  } to={"#trends"}>Trending</NavLink>
+                  } to={"#trends"}>Trending</NavLink> */}
+                  <span className="cursor-pointer font-bold" onClick={() => scrollBehaviour("trend")}>Trending</span>
                 </li>
                 <li className="text-gray-600 hover:text-blue-600">
-                    <NavLink className={({isActive}) => 
+                    {/* <NavLink className={({isActive}) => 
                       isActive ? "font-bold" : undefined
-                  } to={"#blogs"}>Blogs</NavLink>
+                  } to={"#blogs"}>Blogs</NavLink> */}
+                  <span className="cursor-pointer font-bold" onClick={() => scrollBehaviour("blogs")}>Blogs</span>
                 </li>
                 
                 

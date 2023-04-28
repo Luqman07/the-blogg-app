@@ -13,7 +13,6 @@ const Toggletheme = () => {
           setTheme('dark')
         }
     }
-    // useEffect(() => {handleTheme})
     
 
     return ( 
